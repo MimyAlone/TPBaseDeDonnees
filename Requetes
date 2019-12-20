@@ -1,0 +1,95 @@
+1.
+SELECT *
+FROM CHANTEUR;
+
+2.
+SELECT c_ref, c_libelle
+FROM CATEGORIE
+WHERE c_ref = 2;
+
+3.
+SELECT upper(c_nom || c_prenom) as Personne
+FROM CHANTEUR
+WHERE c_nom is NOT NULL AND
+c_prenom is NOT NULL;
+
+4.
+SELECT c_titre
+FROM CHANSON
+WHERE c_annee < 1990;
+
+5.
+SELECT d_titre
+FROM DISQUE
+WHERE d_annee > 1990 AND
+d_annee < 1995
+ORDER BY d_titre ASC;
+
+6.
+SELECT c_titre
+FROM CHANSON
+WHERE left(c_titre,1) = 'm';
+
+7.
+SELECT c_titre
+FROM CHANSON
+WHERE c_titre LIKE '%mens%';
+
+8.
+SELECT DISTINCT c_ref
+FROM CATEGORIE Inner join DISQUE ON c_ref = d_categ;
+
+9.
+SELECT count(DISTINCT c_ref)
+FROM CATEGORIE Inner join DISQUE ON c_ref = d_categ;
+
+10.
+SELECT c_ref, count(d_ref) as NBDisque
+FROM CATEGORIE Inner join DISQUE ON c_ref = d_categ
+GROUP BY c_ref;
+
+11.
+SELECT avg(NBCHANSONS)
+FROM (SELECT count(c_ref) as NBCHANSONS
+FROM (DISQUE INNER JOIN INTERPRETE ON D_ref = i_disque) INNER JOIN CHANSON ON i_chanson = c_ref
+GROUP BY d_ref) i;
+
+12.
+SELECT d_titre
+FROM DISQUE INNER JOIN CATEGORIE ON c_ref = d_categ
+WHERE c_libelle = 'rock';
+
+13.
+SELECT CHANSON.c_titre, CHANSON.c_annee
+FROM (CHANSON INNER JOIN INTERPRETE ON i_chanson = CHANSON.c_ref) INNER JOIN CHANTEUR ON i_chanteur = CHANTEUR.c_ref
+WHERE c_nom ='springsteen';
+
+14.
+SELECT count(CHANSON.c_ref) as NBCHANSON
+FROM (CHANSON INNER JOIN INTERPRETE ON i_chanson = CHANSON.c_ref) INNER JOIN CHANTEUR ON i_chanteur = CHANTEUR.c_ref
+WHERE c_nom ='souchon';
+
+15.
+SELECT d_titre, count(CHANSON.c_ref) as NBCHANSON
+FROM ((DISQUE INNER JOIN INTERPRETE ON i_disque = d_ref) INNER JOIN CHANTEUR ON i_chanteur = CHANTEUR.c_ref) INNER JOIN CHANSON ON i_chanson = CHANSON.c_ref
+WHERE c_nom ='springsteen'
+GROUP BY d_titre;
+
+16.
+SELECT d_titre
+FROM (DISQUE INNER JOIN INTERPRETE ON i_disque = d_ref)INNER JOIN CHANSON ON i_chanson = CHANSON.c_ref
+GROUP BY d_titre
+HAVING count(CHANSON.c_ref) > 3;
+
+17.
+SELECT DISTINCT c_nom, c_prenom
+FROM (DISQUE INNER JOIN INTERPRETE ON i_disque = d_ref) INNER JOIN CHANTEUR ON i_chanteur = c_ref
+WHERE d_titre = 'sol en si';
+
+18.
+SELECT c_nom, c_prenom
+FROM CHANTEUR INNER JOIN GROUPE ON c_ref = g_refpers
+WHERE g_refgroupe = (Select c_ref FROM CHANTEUR WHERE c_nom = 'telephone');
+
+
+	
